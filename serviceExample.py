@@ -1,12 +1,10 @@
-from service import mongoDBService
+from service import rethinkDBservice
 import pprint
+import json
 
-# Affiche un tweet
-pprint.pprint(mongoDBService.findOne())
-# Affiche juste le texte d'un tweet
-pprint.pprint(mongoDBService.findOne()['text'])
-# Recherche juste un tweet
-pprint.pprint(mongoDBService.findOne({"lang":"pt"}))
-# Recherche plusieur tweets
-pprint.pprint(mongoDBService.find({"lang":"pt"})[0])
+r = rethinkDBservice.getConnection()
+
+cursor = r.db('IF29').table('tweets').get(1007083805889450000).run()
+
+print(json.dumps(cursor, indent=4))
 
