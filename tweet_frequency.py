@@ -23,18 +23,14 @@ r = rethinkDBservice.getConnection()
 # np.savetxt('users.txt', users, delimiter=' ', fmt="%s")
 
 data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
-# shape = data.shape
-# print(shape)
 
 for i in data:
-
-
+    # pour chaque utilisateur, on cherche toutes les dates auxquelles il a tweeté
     cursor_user = r.db('IF29').table('tweets').filter({
         "user": {
                 "screen_name": i
         }
     }).run()
-    print(cursor_user)
 
     dates = []
     for t in cursor_user:
@@ -44,6 +40,7 @@ for i in data:
         print(date)
         
     serieDates = pd.Series(dates)
-    # on compte le nombre d'occurence pour chaque jour
+    # on compte le nombre d'occurences pour chaque jour
     frequency = np.mean(serieDates.dt.date.value_counts())
     print(frequency)
+    r.table('users').get(i).update({tweet_per_day:frequency}).run()
