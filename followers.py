@@ -33,6 +33,7 @@ print(users)
 #             ratio = followers/friends
 #         users.append([followers,friends,ratio])
 
+
 # # Si le ratio est plus petit que 1, alors le user suit plus de personnes qu'il n'a de followers (=> profil suspect)
 # print(users)
 
