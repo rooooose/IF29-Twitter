@@ -37,10 +37,10 @@ for i in data:
         date = t['created_date']
         date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         dates.append(date)
-        print(date)
+        
         
     serieDates = pd.Series(dates)
     # on compte le nombre d'occurences pour chaque jour
     frequency = np.mean(serieDates.dt.date.value_counts())
-    print(frequency)
-    r.table('users').get(i).update({tweet_per_day:frequency}).run()
+    print(i, " : ", frequency)
+    r.table('users').get(i).update({'tweet_per_day':frequency}).run()
