@@ -4,18 +4,17 @@ import json
 
 r = rethinkDBservice.getConnection()
 
-cursor = r.db('IF29').table('tweets').pluck({'user':['followers_count', 'friends_count']}).run()
+cursor = r.db('IF29').table('tweets').run()
 
-users = []
-for u in cursor:
-    followers = u['user']['followers_count']
-    friends = u['user']['friends_count']
+for t in cursor:
+    followers = t['user']['followers_count']
+    friends = t['user']['friends_count']
+    screen_name = t['user']['screen_name']
     ratio=0
     if friends != 0:
         ratio = followers/friends
-    users.append([followers,friends,ratio])
+    r.table('users').get(u).update({'followers':followers}, {'friends':friends}, {'ratio' : ratio}).run()
 
-print(users)
 
 # with open("IF29-Twitter\\extraction_attributs\\raw0.json", encoding="utf8") as json_file:
 #     tweets = []
