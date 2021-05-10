@@ -19,12 +19,12 @@ def get_users_followers(u):
     if friends != 0:
         ratio = followers/friends
     print(print(screen_name, " : ", ratio))
-    file1 = open("followers.csv","a")
+    file1 = open("./IF29-Twitter/followers.csv","a")
     file1.write(str(screen_name) +","+ str(followers)+","+ str(friends)+","+ str(ratio)+"\n")
     file1.close()
     # r.table('users').get(u).update({'followers':followers}, {'friends':friends}, {'ratio' : ratio}).run()
 
-L = [get_users_followers(u) for u in data]
+L = [get_users_followers(u) for u in data[np.where(data=='torrente55')[0][0]:]]
 
 # with open("IF29-Twitter\\extraction_attributs\\raw0.json", encoding="utf8") as json_file:
 #     tweets = []
