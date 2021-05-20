@@ -13,7 +13,7 @@ def getUsersCursors():
     return r.db(dbName).table("users").run() 
 
 def getTweetsByUserIdCursors(userId):
-    return r.db(dbName).table("tweets").get_all(userId, index="user-id").run() 
+    return r.db(dbName).table("tweets").get_all(userId, index="userId").run() 
 
 def createData(table, data):
     r.db(dbName).table(table).insert(data).run()
