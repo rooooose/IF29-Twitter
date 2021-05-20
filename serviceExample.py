@@ -14,4 +14,6 @@ users = rethinkDBservice.getUsersCursors()
 for user in users:
     tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])
     pprint.pprint(list(tweets))
+    # calcul resultat
+    rethinkDBservice.updateUser(user["id"], {"resultat": 45, "resultat2": 46})
     break
