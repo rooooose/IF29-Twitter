@@ -9,3 +9,4 @@ r = rethinkDBservice.getConnection()
 # print(json.dumps(cursor, indent=4))
 
 
+r.db('test').table('users').get(742143).run()
