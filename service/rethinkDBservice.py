@@ -17,3 +17,6 @@ def getTweetsByUserIdCursors(userId):
 
 def createData(table, data):
     r.db(dbName).table(table).insert(data).run()
+
+def updateUser(id, data):
+    r.db(dbName).table('users').get(id).update(data).run()
