@@ -9,4 +9,9 @@ r = rethinkDBservice.getConnection()
 # print(json.dumps(cursor, indent=4))
 
 
-r.db('test').table('users').get(742143).run()
+users = rethinkDBservice.getUsersCursors()
+
+for user in users:
+    tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])
+    pprint.pprint(list(tweets))
+    break
