@@ -5,26 +5,26 @@ import numpy as np
 
 r = rethinkDBservice.getConnection()
 
-data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
+# data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
+users = rethinkDBservice.getUsersCursors()
 
 # cursor = r.db('IF29').table('tweets').run()
 def get_users_followers(u):
-    cursor_user = r.table('tweets').get_all(u,index="userScreenName").nth(-1).run()
+    r.db('test').table("users").get(u['id']).replace(r.row.without('ratio')).run() 
+    
+    # tweet = rethinkDBservice.getLastTweetByUserIdCursors(u["id"])
+    # # cursor_user = r.table('tweets').get_all(u,index="userScreenName").nth(-1).run()
 
-    # for t in cursor_user:
-    followers = cursor_user['user']['followers_count']
-    friends = cursor_user['user']['friends_count']
-    screen_name = cursor_user['user']['screen_name']
-    ratio=0
-    if friends != 0:
-        ratio = followers/friends
-    print(print(screen_name, " : ", ratio))
-    file1 = open("./IF29-Twitter/followers.csv","a")
-    file1.write(str(screen_name) +","+ str(followers)+","+ str(friends)+","+ str(ratio)+"\n")
-    file1.close()
-    # r.table('users').get(u).update({'followers':followers}, {'friends':friends}, {'ratio' : ratio}).run()
+    # followers = tweet['user']['followers_count']
+    # friends = tweet['user']['friends_count']
+    # screen_name = tweet['user']['screen_name']
+    # ratio=0
+    # if friends != 0:
+    #     ratio = followers/friends
+    # print(print(u['name'], " : ", ratio))
+    # rethinkDBservice.updateUser(u["id"], {'followers':followers, 'friends':friends, 'ratio_frds_flwrs' : ratio})
 
-L = [get_users_followers(u) for u in data[np.where(data=='torrente55')[0][0]:]]
+L = [get_users_followers(u) for u in users]
 
 # with open("IF29-Twitter\\extraction_attributs\\raw0.json", encoding="utf8") as json_file:
 #     tweets = []
