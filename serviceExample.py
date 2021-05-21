@@ -8,6 +8,10 @@ r = rethinkDBservice.getConnection()
 # cursor = r.db('IF29').table('tweets').pluck({'user':['followers_count', 'friends_count']}).run()
 # print(json.dumps(cursor, indent=4))
 
+# tweets = rethinkDBservice.getTweetsByUserIdCursors(47498699)
+# for tweet in tweets:
+#     pprint.pprint(tweet['user'])
+#     break
 
 users = rethinkDBservice.getUsersCursors()
 
