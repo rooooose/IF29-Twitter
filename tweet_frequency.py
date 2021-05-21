@@ -22,7 +22,9 @@ r = rethinkDBservice.getConnection()
 
 # np.savetxt('users.txt', users, delimiter=' ', fmt="%s")
 
-data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
+# data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
+
+users = rethinkDBservice.getUsersCursors()
 
 def getDates(t):
         date = t['created_date']
@@ -31,25 +33,27 @@ def getDates(t):
         return date
 
 def get_users_freq(u):
-    # pour chaque utilisateur, on cherche toutes les dates auxquelles il a tweeté
-    cursor_user = r.table('tweets').get_all(u,index="userScreenName").run()
-    # cursor_user = r.db('IF29').table('tweets').get_all('user')(i, index='screen_name').run()
-    # print(cursor_user)
 
-    dates = [getDates(t) for t in cursor_user]
+    # pour chaque utilisateur, on cherche toutes les dates auxquelles il a tweeté
+    tweets = rethinkDBservice.getTweetsByUserIdCursors(u["id"])
+
+    dates = [getDates(t) for t in tweets]
     # print(dates)
         
     serieDates = pd.Series(dates)
+
     # on compte le nombre d'occurences pour chaque jour
     frequency = np.mean(serieDates.dt.date.value_counts())
-    print(u, " : ", frequency)
-    file1 = open("tweet_per_day.csv","a")
-    file1.write(str(u) +","+ str(frequency)+"\n")
-    file1.close()
-    return frequency
+    print(u["name"], " : ", frequency)
+    # file1 = open("tweet_per_day.csv","a")
+    # file1.write(str(u) +","+ str(frequency)+"\n")
+    # file1.close()
+    rethinkDBservice.updateUser(u["id"], {"tweet_per_day": frequency})
+    
+    # return frequency
     # r.table('users').get(u).update({'tweet_per_day':frequency}).run()
 
-L = [[u,get_users_freq(u)] for u in data[np.where(data=='torrente55')[0][0]:]]
+L = [get_users_freq(u) for u in users]
 # np.savetxt('tweet_per_day.csv', L, delimiter=',', fmt="%s")
 
 
