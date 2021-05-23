@@ -1,6 +1,4 @@
 from service import rethinkDBservice
-import pprint
-import json
 r = rethinkDBservice.getConnection()
 
 users = list(rethinkDBservice.getUsersCursors())

@@ -1,6 +1,4 @@
 from service import rethinkDBservice
-import pprint
-import json
 r = rethinkDBservice.getConnection()
 
 #Récupération de la liste des utilisateurs
