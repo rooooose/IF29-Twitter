@@ -24,4 +24,4 @@ def get_users_mediumLengthTweets(u):
     
     rethinkDBservice.updateUser(u["id"], {"medium_length_by_tweet": mediumLength})
 
-L = [get_users_mediumLengthTweets(u) for u in users]
+L = [get_users_mediumLengthTweets(u) for u in users]    
