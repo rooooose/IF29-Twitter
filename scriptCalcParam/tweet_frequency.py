@@ -1,11 +1,11 @@
-from service import rethinkDBservice
-import pprint
-import json
+# from service import rethinkDBservice
+# import pprint
+# import json
 import numpy as np
 from datetime import datetime
 import pandas as pd
 
-r = rethinkDBservice.getConnection()
+# r = rethinkDBservice.getConnection()
 
 
 # Récupère tous les noms d'utilisateurs
@@ -24,7 +24,7 @@ r = rethinkDBservice.getConnection()
 
 # data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
 
-users = rethinkDBservice.getUsersCursors()
+# users = rethinkDBservice.getUsersCursors()
 
 def getDates(t):
         date = t['created_date']
@@ -53,11 +53,15 @@ def get_users_freq(u):
     # return frequency
     # r.table('users').get(u).update({'tweet_per_day':frequency}).run()
 
-L = [get_users_freq(u) for u in users]
+# L = [get_users_freq(u) for u in users]
 # np.savetxt('tweet_per_day.csv', L, delimiter=',', fmt="%s")
 
 
-
+def calcTweetFrequency(tweets):
+    dates = [getDates(t) for t in tweets]        
+    serieDates = pd.Series(dates)
+    frequency = np.mean(serieDates.dt.date.value_counts())
+    return {"tweet_per_day": frequency}
 
 
 # for i in data[np.where(data=='snna_x')[0][0]:]:

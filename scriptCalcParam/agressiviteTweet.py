@@ -1,9 +1,9 @@
-from service import rethinkDBservice
-import pprint
+# from service import rethinkDBservice
+# import pprint
 
 # users = rethinkDBservice.getUsersCursors()
 
-def agressiviteTweet(tweets):
+def calcAgressiviteTweet(tweets):
   tweets = sorted(list(tweets), key=lambda tweet: tweet['timestamp_ms'])
   lastTweetFriends = None
   totalFriendsVariation = 0

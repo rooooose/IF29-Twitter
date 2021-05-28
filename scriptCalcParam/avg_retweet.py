@@ -1,19 +1,19 @@
 # Nombre moyen de retweet
 # maj : 17/05/21
 
-from service import rethinkDBservice
-import pprint
-import json
+# from service import rethinkDBservice
+# import pprint
+# import json
 import numpy as np
-from datetime import datetime
-import pandas as pd
+# from datetime import datetime
+# import pandas as pd
 
 
-r = rethinkDBservice.getConnection()
+# r = rethinkDBservice.getConnection()
 
-# Récupère tous les noms d'utilisateurs
-users = rethinkDBservice.getUsersCursors()
-users = list(users)
+# # Récupère tous les noms d'utilisateurs
+# users = rethinkDBservice.getUsersCursors()
+# users = list(users)
 
 def getRetweetCount(t):
     retweet_count = t['retweet_count']
@@ -37,4 +37,9 @@ def get_retweet_avg(u):
     file1.close()
     return avg_retweet
 
-L = [[u,get_retweet_avg(u)] for u in users[:4]]
+# L = [[u,get_retweet_avg(u)] for u in users[:4]]
+
+def calcAvgRetweet(tweets):
+    retweet_count = [getRetweetCount(t) for t in cursor_user]
+    avg_retweet = np.mean(retweet_count)
+    return {"avg_retweet": avg_retweet}

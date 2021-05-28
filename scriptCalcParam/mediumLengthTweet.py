@@ -1,10 +1,10 @@
 from service import rethinkDBservice
-import pprint
-import json
+# import pprint
+# import json
 
 
-r = rethinkDBservice.getConnection()
-users = rethinkDBservice.getUsersCursors()
+# r = rethinkDBservice.getConnection()
+# users = rethinkDBservice.getUsersCursors()
 
 def getLength(t):
         l = len(t['text'])
@@ -24,4 +24,13 @@ def get_users_mediumLengthTweets(u):
     
     rethinkDBservice.updateUser(u["id"], {"medium_length_by_tweet": mediumLength})
 
-L = [get_users_mediumLengthTweets(u) for u in users]    
+# L = [get_users_mediumLengthTweets(u) for u in users]    
+
+def calcMediumLengthTweet(tweets):
+    lengths = [getLength(t) for t in tweets]
+    somme=0
+    for l in lengths:
+       somme = somme + l
+    nbTweets = len(tweets)
+    mediumLength = somme/nbTweets
+    return {"mediumLength": mediumLength}

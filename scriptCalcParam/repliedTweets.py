@@ -1,7 +1,7 @@
-from service import rethinkDBservice
-import pprint
+# from service import rethinkDBservice
+# import pprint
 
-users = rethinkDBservice.getUsersCursors()
+# users = rethinkDBservice.getUsersCursors()
 
 def calcRateRepliedTweets(tweets):
   totalReplied = 0
@@ -13,10 +13,10 @@ def calcRateRepliedTweets(tweets):
   res = totalReplied * 100 / totalTweets
   return {'rateOfRepliedTweets': res}
 
-for user in users:
-    tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])
-    result = calcRateRepliedTweets(tweets)
-    rethinkDBservice.updateUser(user["id"], result)
+# for user in users:
+#     tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])
+#     result = calcRateRepliedTweets(tweets)
+#     rethinkDBservice.updateUser(user["id"], result)
     # pprint.pprint(user)
     # pprint.pprint(result)
     # break

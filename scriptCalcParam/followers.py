@@ -1,12 +1,12 @@
-from service import rethinkDBservice
-import pprint
-import json
-import numpy as np
+# from service import rethinkDBservice
+# import pprint
+# import json
+# import numpy as np
 
-r = rethinkDBservice.getConnection()
+# r = rethinkDBservice.getConnection()
 
 # data = np.loadtxt('./IF29-Twitter/users.txt', dtype='str', delimiter=' ')
-users = rethinkDBservice.getUsersCursors()
+# users = rethinkDBservice.getUsersCursors()
 
 # cursor = r.db('IF29').table('tweets').run()
 def get_users_followers(u):
@@ -24,7 +24,7 @@ def get_users_followers(u):
     # print(print(u['name'], " : ", ratio))
     # rethinkDBservice.updateUser(u["id"], {'followers':followers, 'friends':friends, 'ratio_frds_flwrs' : ratio})
 
-L = [get_users_followers(u) for u in users]
+# L = [get_users_followers(u) for u in users]
 
 # with open("IF29-Twitter\\extraction_attributs\\raw0.json", encoding="utf8") as json_file:
 #     tweets = []
@@ -46,3 +46,12 @@ L = [get_users_followers(u) for u in users]
 # # Si le ratio est plus petit que 1, alors le user suit plus de personnes qu'il n'a de followers (=> profil suspect)
 # print(users)
 
+def calcFollowers(tweets):
+    tweet = list(tweets)[0]
+    followers = tweet['user']['followers_count']
+    friends = tweet['user']['friends_count']
+    if friends != 0:
+        ratio = followers/friends
+    else:
+        ratio = 0
+    return {"rationFollowersFriends": ratio}
