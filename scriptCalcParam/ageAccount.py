@@ -22,7 +22,7 @@ def get_age_account(u):
     #D = reste % 31
     
     #accountAge = [Y, M, D]
-    return {'accountAge' : accountAge }
+    return {'accountAge(days)' : accountAge }
 
 for user in users:
     tweets = list(rethinkDBservice.getTweetsByUserIdCursors(user["id"]))
