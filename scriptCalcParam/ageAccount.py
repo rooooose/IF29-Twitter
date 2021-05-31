@@ -14,15 +14,15 @@ def get_age_account(u):
     
     td = datetime.date(datetime.now())
     
-    age = (td - creationDate2).days
-    Y = age // 365
-    reste = age % 365
+    accountAge = (td - creationDate2).days
+    #Y = age // 365
+    #reste = age % 365
     
-    M = reste // 31
-    D = reste % 31
+    #M = reste // 31
+    #D = reste % 31
     
-    accountAge = [Y, M, D]
-    return {'accountAge [years, months, days]' : accountAge }
+    #accountAge = [Y, M, D]
+    return {'accountAge' : accountAge }
 
 for user in users:
     tweets = list(rethinkDBservice.getTweetsByUserIdCursors(user["id"]))
