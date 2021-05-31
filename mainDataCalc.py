@@ -1,31 +1,39 @@
 from service import rethinkDBservice
 from scriptCalcParam import agressiviteTweet
-from scriptCalcParam import avg_retweet
-from scriptCalcParam import avg_url
+from scriptCalcParam import avgRetweetUrlHashtag
 from scriptCalcParam import followers
 from scriptCalcParam import mediumLengthTweet
 from scriptCalcParam import repliedTweets
 from scriptCalcParam import tweet_frequency
 from scriptCalcParam import verified
 from scriptCalcParam import visibility
+import pprint
+import json
 
 
 users = rethinkDBservice.getUsersCursors()
-
+cmp = 0
 for user in users:
-    tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])
+    tweets = list(rethinkDBservice.getTweetsByUserIdCursors(user["id"]))
 
-    res = [
-        agressiviteTweet.calcAgressiviteTweet(tweets),
-        avg_retweet.calcAvgRetweet(tweets),
-        avg_url.calcAvgUrl(tweets),
-        followers.calcFollowers(tweets),
-        mediumLengthTweet.calcMediumLengthTweet(tweets),
-        repliedTweets.calcRateRepliedTweets(tweets),
-        tweet_frequency.calcTweetFrequency(tweets),
-        verified.calcVerified(tweets),
-        visibility.calcVisibility(tweets),
-    ]
-    # rethinkDBservice.updateUser(user["id"], res)
-    pprint.pprint(res)
-    break
+    if len(tweets) != 0:
+        res = {
+            "agressivite": agressiviteTweet.calcAgressiviteTweet(tweets),
+            "avg_retweet": avgRetweetUrlHashtag.getRetweetAvg(tweets),
+            "avg_url": avgRetweetUrlHashtag.getURLAvg(tweets),
+            "avg_hashtag": avgRetweetUrlHashtag.getHashtagAvg(tweets),
+            "rationFollowersFriends": followers.calcFollowers(tweets),
+            "mediumLength": mediumLengthTweet.get_users_mediumLengthTweets(tweets),
+            "rateOfRepliedTweets": repliedTweets.calcRateRepliedTweets(tweets),
+            "tweet_per_day": tweet_frequency.calcTweetFrequency(tweets),
+            "verified": verified.calcVerified(tweets),
+            "visibility": visibility.calcVisibility(tweets),
+            "version": "1"
+        }
+        rethinkDBservice.updateUser(user["id"], res)
+        # pprint.pprint(res)
+        # pprint.pprint(user)
+        cmp+=1
+        print(cmp)
+        # if cmp > 10:
+        #     break

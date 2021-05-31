@@ -11,7 +11,7 @@ def calcRateRepliedTweets(tweets):
       print(tweet['reply_count'])
       totalReplied+=1
   res = totalReplied * 100 / totalTweets
-  return {'rateOfRepliedTweets': res}
+  return res
 
 # for user in users:
 #     tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])

@@ -8,6 +8,9 @@ def calcAgressiviteTweet(tweets):
   lastTweetFriends = None
   totalFriendsVariation = 0
   totalTweets = len(tweets)
+  if totalTweets == 0:
+    totalTweets = 1
+    
   for tweet in tweets:
     tweeterFriends = tweet['user']['followers_count']
     if not lastTweetFriends:
@@ -16,7 +19,7 @@ def calcAgressiviteTweet(tweets):
       totalFriendsVariation+=tweeterFriends-lastTweetFriends
       lastTweetFriends=tweeterFriends
   res = totalFriendsVariation/totalTweets
-  return {'agressivite': res}
+  return res
 
 # for user in users:
 #     tweets = rethinkDBservice.getTweetsByUserIdCursors(user["id"])

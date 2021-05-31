@@ -20,4 +20,4 @@ def calcVerified(tweets):
     for t in tweets:
         if t["user"]["verified"]:
             verified = True
-    return {"verified": verified}
+    return verified

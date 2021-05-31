@@ -54,4 +54,4 @@ def calcFollowers(tweets):
         ratio = followers/friends
     else:
         ratio = 0
-    return {"rationFollowersFriends": ratio}
+    return ratio

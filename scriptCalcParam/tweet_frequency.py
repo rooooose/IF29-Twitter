@@ -61,7 +61,7 @@ def calcTweetFrequency(tweets):
     dates = [getDates(t) for t in tweets]        
     serieDates = pd.Series(dates)
     frequency = np.mean(serieDates.dt.date.value_counts())
-    return {"tweet_per_day": frequency}
+    return frequency
 
 
 # for i in data[np.where(data=='snna_x')[0][0]:]:

@@ -46,4 +46,4 @@ def calcVisibility(tweets):
     avgHashtag = nbHashtag/len(tweets) * costHashtag
     visibility = ( avgMention + avgHashtag ) / 280
 
-    return {"visibility": visibility}
+    return visibility
