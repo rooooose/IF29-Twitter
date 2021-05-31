@@ -59,6 +59,9 @@ ax = plt.axes(projection='3d')
 zline = composante_princ[0]
 xline = composante_princ[1]
 yline = composante_princ[2]
-ax.plot3D(xline, yline, zline, 'gray')
+ax.scatter(xline, yline, zline, 'gray')
 ax.view_init(60,35)
-fig.show()
+ax.set_xlabel('Axe 1')
+ax.set_ylabel('Axe 2')
+ax.set_zlabel('Axe 3')
+plt.show()
