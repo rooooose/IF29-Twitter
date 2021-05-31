@@ -1,5 +1,5 @@
 """
-Age d'un compte. Data en Local. user['created_at']
+Age d'un compte. 
 """
 from service import rethinkDBservice
 from datetime import datetime, date, timedelta
