@@ -2,7 +2,7 @@
 Age d'un compte. 
 """
 from service import rethinkDBservice
-from datetime import datetime, date, timedelta
+from datetime import datetime
 
 users = list(rethinkDBservice.getUsersCursors())
 tweets = list(rethinkDBservice.getTweetsByUserIdCursors(789995))
