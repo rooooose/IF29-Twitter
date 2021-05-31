@@ -9,6 +9,9 @@ r.connect("151.80.149.147",28015,dbName,user=config.RETHINKDB_USERNAME,password=
 def getConnection():
     return r
 
+def getUsersCursorsVersion(version):
+    return r.db(dbName).table("users").filter(r.row["version"] != version).run() 
+
 def getUsersCursors():
     return r.db(dbName).table("users").run() 
 
