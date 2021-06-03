@@ -2,7 +2,7 @@ from rethinkdb import r
 from config import config
 import pprint
 
-dbName = "test"
+dbName = "allData"
 
 r.connect("151.80.149.147",28015,dbName,user=config.RETHINKDB_USERNAME,password=config.RETHINKDB_PASSWORD).repl()
 

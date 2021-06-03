@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas
 
 
 import pprint
@@ -11,24 +12,25 @@ import pprint
 from service import rethinkDBservice
 
 users = list(rethinkDBservice.getUsersCursors())
-table = []
+# table = [["avg_hashtag","avg_retweet","avg_url","followers","friends","mediumLengthTweets","rateOfRepliedTweets","ratio_frds_flwrs","tweet_per_day","verified","visibility"]]
+table=[]
 cmp = 0
 for user in users:
     table.append([
+        user["agressivite"],
         user["avg_hashtag"],
         user["avg_retweet"],
         user["avg_url"],
-        user["followers"],
-        user["friends"],
-        user["mediumLengthTweets"],
+        user["mediumLength"],
         user["rateOfRepliedTweets"],
-        user["ratio_frds_flwrs"],
+        user["rationFollowersFriends"],
         user["tweet_per_day"],
         user["verified"],
         user["visibility"],
     ])
 
 matriceDonnees = np.array(table)
+print(matriceDonnees)
 
 sc = StandardScaler()
 Z = sc.fit_transform(matriceDonnees)
@@ -52,7 +54,7 @@ eigval = acp.singular_values_**2/n
 
 # résultat ACP : 3 axes
 
-from mpl_toolkits import mplot3d
+# from mpl_toolkits import mplot3d
 
 fig=plt.figure()
 ax = plt.axes(projection='3d')
@@ -64,4 +66,11 @@ ax.view_init(60,35)
 ax.set_xlabel('Axe 1')
 ax.set_ylabel('Axe 2')
 ax.set_zlabel('Axe 3')
+# plt.show()
+
+
+# graphique avec croisement deux à deux
+from pandas.plotting import scatter_matrix
+dataFrameDonnees = pandas.DataFrame(data=matriceDonnees, columns=["agressivite","avg_hashtag","avg_retweet","avg_url","mediumLength","rateOfRepliedTweets","rationFollowersFriends","tweet_per_day","verified","visibility"])
+pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11))
 plt.show()
