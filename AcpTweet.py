@@ -17,6 +17,7 @@ table=[]
 cmp = 0
 for user in users:
     table.append([
+        user["accountAge(days)"],
         user["agressivite"],
         user["avg_hashtag"],
         user["avg_retweet"],
@@ -26,11 +27,12 @@ for user in users:
         user["rationFollowersFriends"],
         user["tweet_per_day"],
         user["verified"],
-        user["visibility"],
+        user["visibility"]
     ])
-
+    cmp+=1
+    print(cmp)
 matriceDonnees = np.array(table)
-print(matriceDonnees)
+# print(matriceDonnees)
 
 sc = StandardScaler()
 Z = sc.fit_transform(matriceDonnees)
@@ -39,6 +41,7 @@ acp = PCA(svd_solver='full')
 
 #calculs des composantes principales
 composante_princ = acp.fit_transform(Z)
+# print(composante_princ[0])
 #nombre de composantes calculées
 # print(acp.n_components_) 
 
@@ -58,9 +61,9 @@ eigval = acp.singular_values_**2/n
 
 fig=plt.figure()
 ax = plt.axes(projection='3d')
-zline = composante_princ[0]
-xline = composante_princ[1]
-yline = composante_princ[2]
+xline = composante_princ[:,0]
+yline = composante_princ[:,1]
+zline = composante_princ[:,2]
 ax.scatter(xline, yline, zline, 'gray')
 ax.view_init(60,35)
 ax.set_xlabel('Axe 1')
@@ -71,6 +74,6 @@ ax.set_zlabel('Axe 3')
 
 # graphique avec croisement deux à deux
 from pandas.plotting import scatter_matrix
-dataFrameDonnees = pandas.DataFrame(data=matriceDonnees, columns=["agressivite","avg_hashtag","avg_retweet","avg_url","mediumLength","rateOfRepliedTweets","rationFollowersFriends","tweet_per_day","verified","visibility"])
+dataFrameDonnees = pandas.DataFrame(data=matriceDonnees, columns=["accountAge(days)", "agressivite","avg_hashtag","avg_retweet","avg_url","mediumLength","rateOfRepliedTweets","rationFollowersFriends","tweet_per_day","verified","visibility"])
 pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11))
 plt.show()

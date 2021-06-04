@@ -2,7 +2,7 @@ from rethinkdb import r
 from config import config
 import pprint
 
-dbName = "test"
+dbName = "allData"
 
 r.connect("151.80.149.147",28015,dbName,user=config.RETHINKDB_USERNAME,password=config.RETHINKDB_PASSWORD).repl()
 
@@ -13,7 +13,7 @@ def getUsersCursorsVersion(version):
     return r.db(dbName).table("users").filter(r.row["version"] != version).run() 
 
 def getUsersCursors():
-    return r.db(dbName).table("users").run() 
+    return r.db(dbName).table("users").has_fields('agressivite').run() 
 
 def getTweetsByUserIdCursors(userId):
     return r.db(dbName).table("tweets").get_all(userId, index="userId").run() 
