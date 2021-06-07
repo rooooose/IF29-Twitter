@@ -49,27 +49,34 @@ composante_princ = acp.fit_transform(Z)
 n=Z.shape[0]
 eigval = acp.singular_values_**2/n
 
-# plt.plot(np.arange(1,11+1),eigval)
-# plt.title("Scree plot")
-# plt.ylabel("Eigen values")
-# plt.xlabel("Factor number")
+plt.plot(np.arange(1,11+1),eigval)
+plt.title("Scree plot")
+plt.ylabel("Eigen values")
+plt.xlabel("Factor number")
 # plt.show()
 
 # résultat ACP : 3 axes
 
 # from mpl_toolkits import mplot3d
 
-fig=plt.figure()
-ax = plt.axes(projection='3d')
+# fig=plt.figure()
+# ax = plt.axes(projection='3d')
 xline = composante_princ[:,0]
 yline = composante_princ[:,1]
 zline = composante_princ[:,2]
-ax.scatter(xline, yline, zline, 'gray')
-ax.view_init(60,35)
-ax.set_xlabel('Axe 1')
-ax.set_ylabel('Axe 2')
-ax.set_zlabel('Axe 3')
-# plt.show()
+# plt.scatter(xline, yline, zline, 'gray')
+# ax.view_init(60,35)
+# ax.set_xlabel('Axe 1')
+# ax.set_ylabel('Axe 2')
+# ax.set_zlabel('Axe 3')
+
+plt.figure("Data representation")
+
+plt.scatter(xline, yline)
+
+plt.ylabel("Axis 1")
+plt.xlabel("Axis 2")
+
 
 
 # graphique avec croisement deux à deux
