@@ -61,9 +61,16 @@ plt.xlabel("Factor number")
 
 # fig=plt.figure()
 # ax = plt.axes(projection='3d')
-xline = composante_princ[:,0]
-yline = composante_princ[:,1]
-zline = composante_princ[:,2]
+
+# import random
+# num_to_select = 500                        
+# sample_composante = random.sample(composante_princ, num_to_select)
+# sample_composante = np.random.choice(composante_princ, num_to_select)
+idx = np.random.randint(len(matriceDonnees), size=500)
+
+xline = composante_princ[idx,0]
+yline = composante_princ[idx,1]
+zline = composante_princ[idx,2]
 # plt.scatter(xline, yline, zline, 'gray')
 # ax.view_init(60,35)
 # ax.set_xlabel('Axe 1')

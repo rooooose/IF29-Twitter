@@ -24,7 +24,8 @@ for user in users:
 
 matriceDonnees = np.array(table)
 
-X_train, X_test, y_train, y_test = train_test_split(matriceDonnees, etiquettes, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(matriceDonnees, etiquettes, test_size=0.7, random_state=42)
+print(X_train)
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
@@ -37,10 +38,18 @@ parametres = {"kernel":["linear", "poly", "rbf", "sigmoid"], "C":[0.01,0.1,1,10,
 svm = SVC()
 grille = GridSearchCV(estimator=svm, param_grid=parametres, scoring="accuracy", cv=2)
 resultats = grille.fit(X_train, y_train)
-print(resultats.bestparams)
+print(resultats.best_params_)
 
 y_pred_test = grille.predict(X_test)
 erreur_test = 1.0 - metrics.accuracy_score(y_test, y_pred_test)
 print("erreur test : ",erreur_test)
 
-print(confusion_matrix(y_test, y_pred_test))
+conf = confusion_matrix(y_test, y_pred_test)
+print(conf)
+import seaborn as sns
+sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect","suspect"], yticklabels=["non suspect","suspect"])
+
+import matplotlib.pyplot as plt
+plt.xlabel('valeurs prédites')
+plt.ylabel('valeurs réelles')
+plt.show()
