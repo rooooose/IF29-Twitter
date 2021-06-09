@@ -35,7 +35,6 @@ def getRetweetAvg(tweets):
     retweet_count = []
     for t in tweets:
         retweet_count.append(t['retweet_count'])
-    # print(retweet_count)
     avg_retweet = np.mean(np.array(retweet_count))
     return avg_retweet
 

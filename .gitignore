@@ -2,3 +2,10 @@ __pycache__/
 config.py
 .vscode/
 venv/
+a-pass.txt
+result1M.json
+result2M.json
+result3M.json
+result500K.json
+data/a-DATA.json
+data/test.json

@@ -7,6 +7,7 @@ from scriptCalcParam import repliedTweets
 from scriptCalcParam import tweet_frequency
 from scriptCalcParam import verified
 from scriptCalcParam import visibility
+from scriptCalcParam import ageAccount
 import pprint
 import json
 
@@ -14,7 +15,7 @@ import json
 users = rethinkDBservice.getUsersCursors()
 cmp = 0
 for user in users:
-    if len(user) <= 1 :
+    if "version" in user and user["version"] == '1' :
         tweets = list(rethinkDBservice.getTweetsByUserIdCursors(user["id"]))
 
         if len(tweets) != 0:
@@ -29,7 +30,8 @@ for user in users:
                 "tweet_per_day": tweet_frequency.calcTweetFrequency(tweets),
                 "verified": verified.calcVerified(tweets),
                 "visibility": visibility.calcVisibility(tweets),
-                "version": "1"
+                "accountAge(days)": ageAccount.get_age_account(tweets),
+                # "version": "2"
             }
             rethinkDBservice.updateUser(user["id"], res)
             # pprint.pprint(res)
