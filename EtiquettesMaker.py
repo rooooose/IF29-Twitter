@@ -14,7 +14,7 @@ nbSuspectTweets = 0
 for user in users:
 #    if(user["verified"]):
 #        rethinkDBservice.updateUser(user["id"], {"suspect": -1})
-    if (user.get("suspect") == None):
+    # if (user.get("suspect") == None):
         attributsSus = 0
         if user["accountAge(days)"] < 200:
             attributsSus+=1
@@ -31,9 +31,18 @@ for user in users:
         if user["avg_url"] > avgUrlMax:
             attributsSus+=1
         if (attributsSus >= 3):
-            #rethinkDBservice.updateUser(user["id"], {"suspect": 1})
+            rethinkDBservice.updateUser(user["id"], {"suspect": 1})
             nbSuspectTweets+=1
             print(nbSuspectTweets)
+            # user['suspect'] = 1
+        else:
+            rethinkDBservice.updateUser(user["id"], {"suspect": -1})
+            print(nbSuspectTweets)
+            # user['suspect'] = 0
+
+
+
+
 
 print(nbSuspectTweets)
 
