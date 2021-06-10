@@ -14,6 +14,7 @@ from service import rethinkDBservice
 users = list(rethinkDBservice.getUsersCursors())
 # table = [["avg_hashtag","avg_retweet","avg_url","followers","friends","mediumLengthTweets","rateOfRepliedTweets","ratio_frds_flwrs","tweet_per_day","verified","visibility"]]
 table=[]
+etiquettes = []
 cmp = 0
 for user in users:
     table.append([
@@ -29,6 +30,7 @@ for user in users:
         user["verified"],
         user["visibility"]
     ])
+    etiquettes.append(user["suspect"])
     cmp+=1
     # print(cmp)
 matriceDonnees = np.array(table)
@@ -67,6 +69,7 @@ plt.xlabel("Factor number")
 # sample_composante = random.sample(composante_princ, num_to_select)
 # sample_composante = np.random.choice(composante_princ, num_to_select)
 idx = np.random.randint(len(matriceDonnees), size=500)
+sample_etiquettes = np.array(etiquettes)[idx]
 
 xline = composante_princ[idx,0]
 yline = composante_princ[idx,1]
