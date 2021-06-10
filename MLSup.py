@@ -52,4 +52,25 @@ sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect
 import matplotlib.pyplot as plt
 plt.xlabel('valeurs prédites')
 plt.ylabel('valeurs réelles')
+
+
+# Représentation dans le plan
+from AcpTweet import xline, yline
+
+h=.02
+x_min, x_max = xline.min()-1, xline.max()+1
+y_min, y_max = yline.min()-1, yline.max()+1
+xx,yy = np.meshgrid(np.arange(x_min,x_max,h), np.arange(y_min,y_max,h))
+
+# Z = grille.predict(np.c_[xx.ravel(), yy.ravel()])
+# Z = Z.reshape(xx.shape)
+
+plt.figure("SVM Supervisé")
+plt.contourf(xx, yy, y_pred_test, cmap=plt.cm.coolwarm, alpha=0.8)
+
+plt.scatter(xline, yline, label='train', edgecolors='k', c=y_pred_test, cmap=plt.cm.coolwarm)
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.title("SVM linear")
+
 plt.show()

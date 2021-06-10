@@ -90,4 +90,4 @@ plt.xlabel("Axis 2")
 from pandas.plotting import scatter_matrix
 dataFrameDonnees = pandas.DataFrame(data=matriceDonnees, columns=["accountAge(days)", "agressivite","avg_hashtag","avg_retweet","avg_url","mediumLength","rateOfRepliedTweets","rationFollowersFriends","tweet_per_day","verified","visibility"])
 pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11))
-plt.show()
+# plt.show()
