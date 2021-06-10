@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from service import rethinkDBservice
+import pandas as pd
 
 users = list(rethinkDBservice.getUsersCursors())
 table = []
@@ -9,12 +10,12 @@ cmp = 0
 for user in users:
     table.append([
         user["avg_hashtag"],
-        user["avg_retweet"],
+        #user["avg_retweet"],
         user["avg_url"],
         user["followers"],
         user["friends"],
         user["mediumLengthTweets"],
-        user["rateOfRepliedTweets"],
+        #user["rateOfRepliedTweets"],
         user["ratio_frds_flwrs"],
         user["tweet_per_day"],
         user["verified"],
@@ -22,6 +23,9 @@ for user in users:
     ])
 
 matriceDonnees = np.array(table)
+
+# attribut = np.array(["avg_hashtag", "avg_retweet", "avg_url", "followers", "friends", "mediumLengthTweets", "rateOfRepliedTweets", "ratio_frds_flwrs", "tweet_per_day", "verified", "visibility"])
+attribut = np.array(["avg_hashtag", "avg_url", "followers", "friends", "mediumLengthTweets", "ratio_frds_flwrs", "tweet_per_day", "verified", "visibility"])
 
 # ===================== Baricentre et inertie ===================== #
 #dimension
@@ -77,11 +81,6 @@ print(Iy)
 from sklearn import preprocessing
 Z = preprocessing.scale(matriceDonnees)
 
-for i in range (dimMatrice[0]):
-	for j in range(dimMatrice[1]):
-		if np.isnan(Z[i,j]) :
-			Z[i,j] = 0
-
 #calcul de gz
 gz = np.zeros((1,dimMatrice[1]))
 for j in range(dimMatrice[1]):
@@ -100,6 +99,18 @@ print(Iz)
 Mcorr=np.corrcoef(np.transpose(Z))
 print("---------------- Matrice corr. ----------------")
 print(Mcorr)
+print(Mcorr.shape)
+
+def isNaN(num):
+    if float('-inf') < float(num) < float('inf'):
+        return False 
+    else:
+        return True
+
+for i in range (Mcorr.shape[0]):
+	for j in range(Mcorr.shape[1]):
+		if isNaN(Mcorr[i,j]) :
+			Mcorr[i,j] = 0
 
 
 #Vecteurs propres et Valeurs propres
@@ -130,14 +141,14 @@ print("---------------- pourcent2 : pourcentage d'inertie dans les 2 axes ------
 print(pourcent2)
 
 #représentation des individus sur ces 2 axes
-itimg=itimg+1 
+itimg=1 
 plt.figure(itimg) #on explicite le numéro de la figure 
 plt.plot(CP2[:,0],CP2[:,1],'.')
 plt.xlabel("axe1")
 plt.ylabel("axe2")
 plt.title("axe1 as function of axe2")
-for i in range(dimMatrice[0]):
-	plt.text(CP2[i,0], CP2[i,1], vehicule[i+1,0], horizontalalignment='left', verticalalignment='center')
+# for i in range(dimMatrice[0]):
+# 	plt.text(CP2[i,0], CP2[i,1], vehicule[i+1,0], horizontalalignment='left', verticalalignment='center')
 
 
 # ===================== ACP 3 composantes ===================== #
@@ -192,6 +203,8 @@ print("---------------- CTRV2 ----------------")
 print(CTRV2)
 
 print("---------------- CTAV2 ----------------")
+CTAV2 = pd.DataFrame(CTAV2)
+CTAV2.index = attribut
 print(CTAV2)
 
 #V-3-i 
@@ -218,7 +231,7 @@ plt.ylabel("axis2")
 #V.3.ii
 for j in range(dimMatrice[1]):
 	plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
-	plt.text(McorrV2[j,0],McorrV2[j,1],vehicule[0,j+1])
+	plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
 plt.show() #fig.7
 
 # ===================== VI ===================== #
@@ -245,8 +258,8 @@ plt.show()
 #figure 9 - dispersion cumulée
 
 #VI.1.iii
-angleB=np.zeros((1,dimX[1]-2))
-for i in np.arange(1,dimX[1]-1):# on ignore le premier et le dernier element
+angleB=np.zeros((1,dimMatrice[1]-2))
+for i in np.arange(1,dimMatrice[1]-1):# on ignore le premier et le dernier element
 	xA=i
 	yA=poucent_cumul[i-1]
 	xB=i+1
