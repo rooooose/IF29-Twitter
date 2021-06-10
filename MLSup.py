@@ -24,7 +24,7 @@ for user in users:
 
 matriceDonnees = np.array(table)
 
-X_train, X_test, y_train, y_test = train_test_split(matriceDonnees, etiquettes, test_size=0.7, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(matriceDonnees, etiquettes, test_size=0.9, random_state=42)
 print(X_train)
 
 from sklearn.model_selection import GridSearchCV
@@ -33,16 +33,24 @@ from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 
 
-parametres = {"kernel":["linear", "poly", "rbf", "sigmoid"], "C":[0.01,0.1,1,10,100]}
+# parametres = {"kernel":["linear", "poly", "rbf", "sigmoid"], "C":[0.01,0.1,1,10,100]}
 
-svm = SVC()
-grille = GridSearchCV(estimator=svm, param_grid=parametres, scoring="accuracy", cv=2)
-resultats = grille.fit(X_train, y_train)
-print(resultats.best_params_)
+# svm = SVC()
+# grille = GridSearchCV(estimator=svm, param_grid=parametres, scoring="accuracy", cv=2)
+# resultats = grille.fit(X_train, y_train)
+# print(resultats.best_params_)
 
-y_pred_test = grille.predict(X_test)
-erreur_test = 1.0 - metrics.accuracy_score(y_test, y_pred_test)
-print("erreur test : ",erreur_test)
+C = 0.01
+noyau = 'linear'
+svm = SVC(C,noyau)
+
+svm.fit(X_train, y_train)
+
+y_pred_test = svm.predict(X_test)
+
+# y_pred_test = grille.predict(X_test)
+# erreur_test = 1.0 - metrics.accuracy_score(y_test, y_pred_test)
+# print("erreur test : ",erreur_test)
 
 conf = confusion_matrix(y_test, y_pred_test)
 print(conf)
@@ -55,22 +63,27 @@ plt.ylabel('valeurs réelles')
 
 
 # Représentation dans le plan
-from AcpTweet import xline, yline
+from AcpTweet import xline, yline, composante_princ
 
 h=.02
 x_min, x_max = xline.min()-1, xline.max()+1
 y_min, y_max = yline.min()-1, yline.max()+1
 xx,yy = np.meshgrid(np.arange(x_min,x_max,h), np.arange(y_min,y_max,h))
 
-# Z = grille.predict(np.c_[xx.ravel(), yy.ravel()])
-# Z = Z.reshape(xx.shape)
+svm.fit(composante_princ[:,0:2],etiquettes)
+Z = svm.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
 
 plt.figure("SVM Supervisé")
-plt.contourf(xx, yy, y_pred_test, cmap=plt.cm.coolwarm, alpha=0.8)
+plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
 
-plt.scatter(xline, yline, label='train', edgecolors='k', c=y_pred_test, cmap=plt.cm.coolwarm)
+plt.scatter(composante_princ[:,0], composante_princ[:,1], label='train', edgecolors='k', cmap=plt.cm.coolwarm)
 plt.xlabel('x1')
 plt.ylabel('x2')
 plt.title("SVM linear")
+
+# plt.scatter(xline, yline, c=y_pred_test, s=50, cmap='autumn')
+# plot_svc_decision_function(clf, plot_support=False);
+
 
 plt.show()

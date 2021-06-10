@@ -30,7 +30,7 @@ for user in users:
         user["visibility"]
     ])
     cmp+=1
-    print(cmp)
+    # print(cmp)
 matriceDonnees = np.array(table)
 # print(matriceDonnees)
 
