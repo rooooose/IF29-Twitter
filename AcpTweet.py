@@ -12,7 +12,7 @@ from service import rethinkDBservice
 users = list(rethinkDBservice.getUsersCursors())
 table=[]
 etiquettes = []
-cmp = 0
+# cmp = 0
 for user in users:
     table.append([
         user["accountAge(days)"],
@@ -27,8 +27,8 @@ for user in users:
         user["verified"],
         user["visibility"]
     ])
-    etiquettes.append(user["suspect"])
-    cmp+=1
+    # etiquettes.append(user["suspect"])
+    # cmp+=1
     # print(cmp)
 
 matriceDonnees = np.array(table)
@@ -49,10 +49,10 @@ Z = sc.fit_transform(matriceDonnees)
 
 acp = PCA(svd_solver='full')
 
-#calculs des composantes principales
+# calculs des composantes principales
 composante_princ = acp.fit_transform(Z)
 # print(composante_princ[0])
-#nombre de composantes calculées
+# nombre de composantes calculées
 # print(acp.n_components_) 
 
 # valeur corrigée par les valeurs singulières
@@ -85,29 +85,27 @@ print(dimMatrice)
 g=np.zeros((1,dimMatrice[1]))
 for j in range(dimMatrice[1]):
     g[0,j]=np.mean(matriceDonnees[:,j])
-print(g)
+# print(g)
 
 #calcul de l'inertie
 I=0
 for i in range(dimMatrice[0]):
     I= I + np.sum((matriceDonnees[i,:]-g)*(matriceDonnees[i,:]-g))
-print(I)
 I = I/dimMatrice[0]
-print(I)
+# print(I)
 
 # ===================== Centrer-réduire les données ===================== #
 #matrice de valeurs centrées
 Y=np.zeros(dimMatrice)
 for j in range(dimMatrice[1]):
     Y[:,j]= matriceDonnees[:,j] - np.mean(matriceDonnees[:,j])
-print(Y)
+# print(Y)
 
 #calcul de gy
 gy=np.zeros((1,dimMatrice[1]))
-#print(gy)
 for j in range(dimMatrice[1]):
     gy[0,j] = np.mean(Y[:,j])
-print(gy)
+# print(gy)
 
 
 #calcul de l'inertie
@@ -116,7 +114,7 @@ for i in range(dimMatrice[0]):
     Iy = Iy + np.sum((Y[i,:] - gy)*(Y[i,:] - gy))
 
 Iy = Iy/dimMatrice[0]
-print(Iy)
+# print(Iy)
 
 # #matrice de valeurs centrées-réduites - gestion de la division par zéros
 # Z = np.zeros(dimMatrice)
@@ -140,7 +138,7 @@ Iz = 0
 for i in range(dimMatrice[0]):
     Iz = Iz + np.sum((Z[i,:] - gz)*(Z[i,:] - gz))
 Iz = Iz / dimMatrice[0]
-print(Iz)
+# print(Iz)
 
 # ===================== Corrélations, VeP et VaP ===================== #
 #Matrice corrélations
@@ -190,16 +188,15 @@ print("--------- pourcent2 : pourcentage d'inertie dans les 2 axes ---------")
 print(pourcent2)
 
 
-#représentation de 500 individus pris aléatoirement sur ces 2 axes
-idx = np.random.randint(len(matriceDonnees), size=500)
-sample_etiquettes = np.array(etiquettes)[idx]
+#représentation de 100 000 individus pris aléatoirement sur ces 2 axes
+idx = np.random.randint(len(matriceDonnees), size=10000)
 
 itimg=1 
 plt.figure(itimg) #on explicite le numéro de la figure 
 plt.plot(CP2[idx,0],CP2[idx,1],'.')
 plt.xlabel("axe1")
 plt.ylabel("axe2")
-plt.title("Représentation de 500 points sur les 2 composantes principales")
+plt.title("Représentation de 10 000 points sur les 2 composantes principales")
 
 
 # ===================== ACP 3 composantes ===================== #
@@ -272,7 +269,7 @@ plt.ylabel("axis2")
 for j in range(dimMatrice[1]):
     plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
     plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
-plt.show() #fig.7
+plt.show() 
 
 # ===================== Inertie cumulée en fonction du nb de CP===================== #
 
