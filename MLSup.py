@@ -52,70 +52,53 @@ print("erreur test : ",erreur_test)
 
 conf = confusion_matrix(y_test, y_pred_test)
 print(conf)
-import seaborn as sns
-sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect","suspect"], yticklabels=["non suspect","suspect"])
 
 import matplotlib.pyplot as plt
 plt.figure("Confusion matrix")
 plt.xlabel('valeurs prédites')
 plt.ylabel('valeurs réelles')
 
+import seaborn as sns
+sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect","suspect"], yticklabels=["non suspect","suspect"])
+
+plt.show()
+
 
 
 # Représentation dans le plan
-from AcpTweet import xline, yline, zline, sample_etiquettes, composante_princ
+from AcpTweet import CP2
 
-idx_test = np.random.randint(len(matriceDonnees), size=500)
-sample_etiquettes_test = np.array(etiquettes)[idx_test]
+X_train_ACP, X_test_ACP, y_train_ACP, y_test_ACP = train_test_split(CP2, etiquettes, test_size=10000, train_size=100000, random_state=42)
 
-xline_test = composante_princ[idx_test,0]
-yline_test = composante_princ[idx_test,1]
-zline_test = composante_princ[idx_test,2]
+# idx = np.random.randint(len(matriceDonnees), size=1000)
+# sample_etiquettes = np.array(etiquettes)[idx]
+# xline = CP2[idx,0]
+# yline = CP2[idx,1]
+
+# Test de l'apprentissage sur un échantillon aléatoire de 500 individus pour la représentation
+
+# idx_test = np.random.randint(len(matriceDonnees), size=1000)
+# sample_etiquettes_test = np.array(etiquettes)[idx_test]
+# xline_test = CP2[idx_test,0]
+# yline_test = CP2[idx_test,1]
 
 h=.02
-x_min, x_max = xline_test.min()-1, xline_test.max()+1
-y_min, y_max = yline_test.min()-1, yline_test.max()+1
+x_min, x_max = X_test_ACP[:,0].min()-1, X_test_ACP[:,0].max()+1
+y_min, y_max = X_test_ACP[:,1].min()-1, X_test_ACP[:,1].max()+1
 xx,yy = np.meshgrid(np.arange(x_min,x_max,h), np.arange(y_min,y_max,h))
 
-svm.fit(np.column_stack((xline,yline)),sample_etiquettes)
-# svm.fit(composante_princ[:,0:2],etiquettes)
+svm.fit(X_train_ACP,y_train_ACP)
 
-Z = svm.predict(np.c_[xx.ravel(), yy.ravel()])
-Z = Z.reshape(xx.shape)
+Z_origin = svm.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z_origin.reshape(xx.shape)
 
 plt.figure("SVM Supervisé")
 plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
 
-plt.scatter(xline_test, yline_test, label='train', edgecolors='k', c=sample_etiquettes_test, cmap=plt.cm.coolwarm)
+plt.scatter(X_test_ACP[:,0], X_test_ACP[:,1], label='train', edgecolors='k', c=y_test_ACP, cmap=plt.cm.coolwarm)
 # plt.scatter(composante_princ[:,0], composante_princ[:,1], label='train', edgecolors='k', c=etiquettes, cmap=plt.cm.coolwarm)
 plt.xlabel('x1')
 plt.ylabel('x2')
 plt.title("SVM linear")
 
-# 3D VIZ
-
-# h=.02
-# x_min, x_max = xline_test.min()-1, xline_test.max()+1
-# y_min, y_max = yline_test.min()-1, yline_test.max()+1
-# z_min, z_max = zline_test.min()-1, zline_test.max()+1
-# xx,yy,zz = np.meshgrid(np.arange(x_min,x_max,h), np.arange(y_min,y_max,h), np.arange(z_min,z_max,h))
-
-# svm.fit(np.column_stack((xline,yline,zline)),sample_etiquettes)
-
-# Z = svm.predict(np.c_[xx.ravel(), yy.ravel(), zz.ravel()])
-# Z = Z.reshape(xx.shape)
-
-# plt.figure("SVM Supervisé")
-# # plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
-
-# ax = plt.axes(projection='3d')
-# plt.scatter(xline_test, yline_test, zline_test, 'gray')
-# ax.view_init(60,35)
-# ax.set_xlabel('Axe 1')
-# ax.set_ylabel('Axe 2')
-# ax.set_zlabel('Axe 3')
-
 plt.show()
-
-erreur_viz = 1.0 - metrics.accuracy_score(sample_etiquettes, sample_etiquettes_test)
-print("erreur test : ",erreur_viz)

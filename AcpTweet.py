@@ -25,7 +25,7 @@ for user in users:
         user["verified"],
         user["visibility"]
     ])
-    # etiquettes.append(user["suspect"])
+    etiquettes.append(user["suspect"])
     # cmp+=1
     # print(cmp)
 
@@ -33,13 +33,6 @@ matriceDonnees = np.array(table)
 # print(matriceDonnees)
 
 attribut = np.array(["accountAge", "agressivite", "avg_hashtag", "avg_url", "mediumLength", "rationFollowersFriends", "tweet_per_day", "verified", "visibility"])
-
-# graphique avec croisement deux à deux
-from pandas.plotting import scatter_matrix
-dataFrameDonnees = pd.DataFrame(data=matriceDonnees, columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
-pd.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
-plt.show()
-
 
 # ACP pour afficher graphique en coude pour choix du nombre de CP
 sc = StandardScaler()
@@ -70,9 +63,6 @@ plt.show()
 
 
 
-idx = np.random.randint(len(matriceDonnees), size=1000)
-sample_etiquettes = np.array(etiquettes)[idx]
-
 # ===================== Introduction ===================== #
 # cette analyse plus approfondi n'utilise pas la bibliothèque sklearn mais un TD réalisé dans le cadre de l'UE IF29
 # cette analyse permet de mettre en évidence le choix du nombre de CP et les attributs contribuant à la formation des axes
@@ -81,7 +71,7 @@ sample_etiquettes = np.array(etiquettes)[idx]
 # ===================== Baricentre et inertie ===================== #
 #dimension
 dimMatrice=matriceDonnees.shape
-print(dimMatrice)
+# print(dimMatrice)
 
 #calcul du baricentre g
 g=np.zeros((1,dimMatrice[1]))
@@ -111,10 +101,12 @@ for j in range(dimMatrice[1]):
 # print(gy)
 
 # graphique avec croisement deux à deux
+idx = np.random.randint(len(matriceDonnees), size=500)
+
 from pandas.plotting import scatter_matrix
-dataFrameDonnees = pandas.DataFrame(data=matriceDonnees[idx,:], columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
-pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
-# plt.show()
+dataFrameDonnees = pd.DataFrame(data=matriceDonnees[idx,:], columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
+pd.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
+plt.show()
 
 #calcul de l'inertie
 Iy=0
@@ -152,9 +144,9 @@ Iz = Iz / dimMatrice[0]
 #Matrice corrélations
 
 Mcorr=np.corrcoef(np.transpose(Z))
-print("---------------- Matrice corr. ----------------")
-print(Mcorr)
-print(Mcorr.shape)
+# print("---------------- Matrice corr. ----------------")
+# print(Mcorr)
+# print(Mcorr.shape)
 
 def isNaN(num):
     if float('-inf') < float(num) < float('inf'):
@@ -186,22 +178,22 @@ CP2=np.dot(Z,VeP[:,0:2])  #O:2=0 et 1
 
 #Corrélation entre les 2 composantes
 Mcorr2 = np.corrcoef(np.transpose(CP2))
-print("--------- Mcorr2 : F1 et F2 ---------")
-print(Mcorr2)
+# print("--------- Mcorr2 : F1 et F2 ---------")
+# print(Mcorr2)
 
 #pourcentage d'inertie dans les 2 axes
 pourcent2 = np.sum(VaP[0:2])*100/Iacp
-print("")
-print("--------- pourcent2 : pourcentage d'inertie dans les 2 axes ---------")
-print(pourcent2)
+# print("")
+# print("--------- pourcent2 : pourcentage d'inertie dans les 2 axes ---------")
+# print(pourcent2)
 
 
 #représentation de 100 000 individus pris aléatoirement sur ces 2 axes
 idx = np.random.randint(len(matriceDonnees), size=10000)
 
 itimg=1 
-plt.figure(itimg) #on explicite le numéro de la figure 
-plt.plot(CP2[idx,0],CP2[idx,1],'.')
+plt.figure(itimg) #on explicite le numéro de la figure
+plt.plot(CP2[idx,0], CP2[idx,1],'.')
 plt.xlabel("axe1")
 plt.ylabel("axe2")
 plt.title("Représentation de 10 000 points sur les 2 composantes principales")
@@ -213,14 +205,14 @@ CP3=np.dot(Z,VeP[:,0:3])  #O:2=0 et 1
 
 #Corrélation entre les 3 composantes
 Mcorr3 = np.corrcoef(np.transpose(CP3))
-print("--------- Mcorr3 : F1, F2 et F3 ---------")
-print(Mcorr3)
+# print("--------- Mcorr3 : F1, F2 et F3 ---------")
+# print(Mcorr3)
 
 #pourcentage d'inertie dans les 3 axes
 pourcent3 = np.sum(VaP[0:3])*100/Iacp
-print("")
-print("--------- pourcent3 : pourcentage d'inertie dans les 3 axes ---------")
-print(pourcent3)
+# print("")
+# print("--------- pourcent3 : pourcentage d'inertie dans les 3 axes ---------")
+# print(pourcent3)
 
 
 
@@ -232,8 +224,8 @@ for i in range(dimMatrice[1]):
     for j in range(2):
         McorrV2[i,j] = np.corrcoef(Z[:,i], CP2[:,j])[0,1]
 #[0,1] est l'indice dans la matrice de corr.
-print("--------- McorrV2 ---------")
-print(McorrV2)
+# print("--------- McorrV2 ---------")
+# print(McorrV2)
 
 #CTR
 CTRV2=McorrV2*McorrV2*100
@@ -243,13 +235,13 @@ CTAV2=np.zeros(CTRV2.shape)
 for j in range(2):
     CTAV2[:,j]=CTRV2[:,j]/VaP[j]
 
-print("--------- CTRV2 ---------")
-print(CTRV2)
+# print("--------- CTRV2 ---------")
+# print(CTRV2)
 
-print("--------- CTAV2 ---------")
+# print("--------- CTAV2 ---------")
 CTAV2 = pd.DataFrame(CTAV2)
 CTAV2.index = attribut
-print(CTAV2)
+# print(CTAV2)
 
 # Représentation des vecteurs de corrélation sur le cercle unité
 #trace le cercle
@@ -290,3 +282,4 @@ plt.plot(x,poucent_cumul)
 plt.xlabel("nombre de variables") 
 plt.ylabel("pourcentage d'inertie cumulée")
 plt.show()
+
