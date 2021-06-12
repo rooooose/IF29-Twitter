@@ -10,11 +10,11 @@ ratioFollowersFriendsMax = 0.1
 avgHashtagMax = 0.3
 avgUrlMax = 1.5
 
-nbSuspectTweets = 0
+nbSuspectTweets = 1260
 for user in users:
 #    if(user["verified"]):
 #        rethinkDBservice.updateUser(user["id"], {"suspect": -1})
-    # if (user.get("suspect") == None):
+    if (user.get("suspect") == None):
         attributsSus = 0
         if user["accountAge(days)"] < 200:
             attributsSus+=1

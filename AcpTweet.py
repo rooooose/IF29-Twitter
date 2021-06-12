@@ -21,10 +21,8 @@ for user in users:
         user["accountAge(days)"],
         user["agressivite"],
         user["avg_hashtag"],
-        user["avg_retweet"],
         user["avg_url"],
         user["mediumLength"],
-        user["rateOfRepliedTweets"],
         user["rationFollowersFriends"],
         user["tweet_per_day"],
         user["verified"],
@@ -51,7 +49,7 @@ composante_princ = acp.fit_transform(Z)
 n=Z.shape[0]
 eigval = acp.singular_values_**2/n
 
-plt.plot(np.arange(1,11+1),eigval)
+plt.plot(np.arange(1,9+1),eigval)
 plt.title("Scree plot")
 plt.ylabel("Eigen values")
 plt.xlabel("Factor number")
@@ -64,11 +62,7 @@ plt.xlabel("Factor number")
 # fig=plt.figure()
 # ax = plt.axes(projection='3d')
 
-# import random
-# num_to_select = 500                        
-# sample_composante = random.sample(composante_princ, num_to_select)
-# sample_composante = np.random.choice(composante_princ, num_to_select)
-idx = np.random.randint(len(matriceDonnees), size=500)
+idx = np.random.randint(len(matriceDonnees), size=1000)
 sample_etiquettes = np.array(etiquettes)[idx]
 
 xline = composante_princ[idx,0]
@@ -84,13 +78,13 @@ plt.figure("Data representation")
 
 plt.scatter(xline, yline)
 
-plt.ylabel("Axis 1")
-plt.xlabel("Axis 2")
+plt.ylabel("Axis 2")
+plt.xlabel("Axis 1")
 
 
 
 # graphique avec croisement deux à deux
 from pandas.plotting import scatter_matrix
-dataFrameDonnees = pandas.DataFrame(data=matriceDonnees, columns=["accountAge(days)", "agressivite","avg_hashtag","avg_retweet","avg_url","mediumLength","rateOfRepliedTweets","rationFollowersFriends","tweet_per_day","verified","visibility"])
-pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11))
+dataFrameDonnees = pandas.DataFrame(data=matriceDonnees[idx,:], columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
+pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
 # plt.show()
