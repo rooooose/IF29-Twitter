@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Ce code a été produit par le Pr Ricco R. de l'univ. de Lyon 2
-#Utilisé par Kenza TAAMMA et Bertille TEMPLE
+#Utilisé et modifié par Kenza TAAMMA et Bertille TEMPLE (création des projections 2D et 3D, ainsi que de la classification d'un nouvel utilisateur)
 
 #modification du dossier par défaut
 import os
@@ -52,9 +52,9 @@ print(dataFrameDonnees.iloc[0:6,:])
 #statistiques descriptives
 print(dataFrameDonnees.describe())
 
-#graphique avec croisement deux à deux
-from pandas.plotting import scatter_matrix
-pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11)) 
+# #graphique avec croisement deux à deux
+# from pandas.plotting import scatter_matrix
+# pandas.plotting.scatter_matrix(dataFrameDonnees,figsize=(11,11)) 
 
 #centrage réduction des données
 from sklearn import preprocessing
@@ -79,6 +79,8 @@ plt.xlabel("# of clusters")
 plt.plot(np.arange(2,12,1),res)
 plt.show()
 
+# =============== Fonction déroulant l'étude du clustering KMeans sur notre dataset =============== #
+# =============== En fonction du nombre de cluster passé en argument =============== #
 
 def clusteringKmeans(nb_cluster):
     #k-means sur les données centrées et réduites
@@ -130,34 +132,53 @@ def clusteringKmeans(nb_cluster):
     # print("##################### R2 ####################")
     # print(R2)
 
-    #ACP
+    #ACP pour affichage
     from sklearn.decomposition import PCA
     acp = PCA(n_components=2).fit_transform(dataFrameDonnees_cr)
     # print("#### ACP #####")
     # print (acp)
 
-    y_kmeans_PCA = kmeans.fit_predict(acp)
+    # ------- Projection 2D ------- #
 
-    #projeter dans le plan factoriel
-    #avec un code couleur selon le groupe
-    plt.scatter(acp[:,0],acp[:,1], c=y_kmeans_PCA, cmap='viridis') 
+    # discrétise l'échelle de couleur viridis pour l'affichage
+    cmap = plt.get_cmap("viridis", nb_cluster)
+
+    # création du dataframe avec les CP et les labels correspondants par concaténation
+    acp_df = pandas.DataFrame(data=acp[:,:2], columns=["CP1", "CP2"])
+    labels = pandas.DataFrame(data=kmeans.labels_, columns=["label"])
+    labeled_acp = pandas.concat([acp_df, labels], axis=1)
+    print("----------- labeled acp -----------")
+    print(labeled_acp)
+
+    # création des groupes pour l'affichage
+    clusters = labeled_acp.groupby("label")
+    # projection dans le plan factoriel
+    # avec un code couleur selon le groupe
+    # plt.scatter(acp[:,0],acp[:,1], c=kmeans.labels_, cmap='viridis', label = name) #sans le groupby et l'affichage des legendes
+    for name, group in clusters :
+        plt.scatter(group["CP1"],group["CP2"], color=cmap(int(name)), label = name) 
     plt.xlabel("Composante Principale 1")
     plt.ylabel("Composante Principale 2")
     plt.title("Clustering KMeans "+ str(nb_cluster) + " clusters - projection 2D")
-    #plt.show()  
-    # print ("====================== kmeans label ======================")
-    # print (kmeans.labels_)
+    plt.legend() 
 
+    # ------- Projection 3D ------- #
+
+    # ACP pour affichage 3D
     acp = PCA(n_components=3).fit_transform(dataFrameDonnees_cr)
+    # création du dataframe concaténé aux labels
+    acp_df = pandas.DataFrame(data=acp[:,:3], columns=["CP1", "CP2", "CP3"])
+    labels = pandas.DataFrame(data=kmeans.labels_, columns=["label"])
+    labeled_acp = pandas.concat([acp_df, labels], axis=1)
+    # création des groupes pour l'affichage
+    clusters = labeled_acp.groupby("label")
 
-    y_kmeans_PCA = kmeans.fit_predict(acp)
-
+    # projection 3D
     fig = plt.figure(figsize=(20,10))
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(acp[:,0],acp[:,1],acp[:,2], 
-                c=y_kmeans_PCA, cmap='viridis',
-                edgecolor='k', s=40, alpha = 0.5)
-
+    # ax.scatter(acp[:,0],acp[:,1],acp[:,2], c=kmeans.labels_, cmap='viridis', edgecolor='k', s=40, alpha = 0.5) #sans le groupby et l'affichage des legendes
+    for name, group in clusters :
+        ax.scatter(group["CP1"],group["CP2"], group["CP3"], color=cmap(int(name)), edgecolor='k', s=40, alpha = 0.5, label = name)
     ax.view_init(60,35)
     ax.set_title("Clustering KMeans "+ str(nb_cluster) + " clusters - projection 3D")
     ax.set_xlabel("Composante principale 1")
@@ -166,17 +187,15 @@ def clusteringKmeans(nb_cluster):
     ax.dist = 10
 
     ax.scatter(kmeans.cluster_centers_[:,0], kmeans.cluster_centers_[:,1], kmeans.cluster_centers_[:,2], c='black', s=200, alpha=0.5, label = 'Centroid')
-
+    plt.legend() 
     plt.autoscale(enable=True, axis='x', tight=True)    
 
-    # plt.show()
-
-    y_kmeans_PCA = kmeans.fit_predict(acp)
-    y_kmeans_PCA
-
+    # autre projection 3D - rotation pour une meilleure visualisation
     fig = plt.figure(figsize=(20,10))
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(acp[:,0],acp[:,1],acp[:,2], c=y_kmeans_PCA, cmap='viridis', edgecolor='k', s=40, alpha = 0.5)
+    # ax.scatter(acp[:,0],acp[:,1],acp[:,2], c=kmeans.labels_, cmap='viridis', edgecolor='k', s=40, alpha = 0.5) #sans le groupby et l'affichage des legendes
+    for name, group in clusters :
+        ax.scatter(group["CP1"],group["CP2"], group["CP3"], color=cmap(int(name)), edgecolor='k', s=40, alpha = 0.5, label = name)
 
     ax.set_title("Clustering KMeans "+ str(nb_cluster) + " clusters - projection 3D")
     ax.set_xlabel("Composante principale 1")
@@ -185,10 +204,14 @@ def clusteringKmeans(nb_cluster):
     ax.dist = 10
 
     ax.scatter(kmeans.cluster_centers_[:,0], kmeans.cluster_centers_[:,1], kmeans.cluster_centers_[:,2], c='black', s=200, alpha=0.5, label = 'Centroid')
-
+    plt.legend() 
     plt.autoscale(enable=True, axis='x', tight=True)    
 
+    # affichage des 3 graphiques (2D et 3D)
     plt.show()
+
+
+# =============== Etude clustering KMeans sur notre dataset =============== #
 
 print(" ----------- 2 clusters -----------")
 clusteringKmeans(2)
@@ -198,3 +221,33 @@ print(" ----------- 4 clusters -----------")
 clusteringKmeans(4)
 
 
+
+# =============== Fonction pour assigner un cluster à une nouvelle valeure =============== #
+
+def classerNewUserKMeans(user, nb_cluster):
+    kmeans = cluster.KMeans(n_clusters=nb_cluster)
+    kmeans.fit(dataFrameDonnees_cr)
+    # baricentres des n clusters
+    # print(kmeans.cluster_centers_)
+
+    if user[9] == True:
+        user[9] = 1
+    else :
+        user[9] = 0
+
+    baricentres = kmeans.cluster_centers_
+
+    distances=np.zeros((1,nb_cluster)) 
+    for i in range(nb_cluster):
+        distances[0,i]=sum((user-baricentres[i,:])*(user-baricentres[i,:]))
+
+    print("--------- Distances aux baricentres ---------")
+    print(distances)
+    id_proche=np.argmin(distances) 
+    print("class = "+str(id_proche)) 
+    print('FIN')
+
+# =============== Utilisateur à classifier =============== #
+user = [12, 1, 4, 100, 50, 80, 0, 0.5, 2, True, 0.0821]
+# print(user[9])
+classerNewUserKMeans(user, 3)
