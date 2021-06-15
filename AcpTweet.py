@@ -50,11 +50,11 @@ composante_princ = acp.fit_transform(Z)
 n=Z.shape[0]
 eigval = acp.singular_values_**2/n
 
-plt.plot(np.arange(1,9+1),eigval)
-plt.title("Scree plot")
-plt.ylabel("Eigen values")
-plt.xlabel("Factor number")
-plt.show()
+# plt.plot(np.arange(1,9+1),eigval)
+# plt.title("Scree plot")
+# plt.ylabel("Eigen values")
+# plt.xlabel("Factor number")
+# plt.show()
 
 
 # =============================================================== #
@@ -103,10 +103,10 @@ for j in range(dimMatrice[1]):
 # graphique avec croisement deux à deux
 idx = np.random.randint(len(matriceDonnees), size=500)
 
-from pandas.plotting import scatter_matrix
-dataFrameDonnees = pd.DataFrame(data=matriceDonnees[idx,:], columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
-pd.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
-plt.show()
+# from pandas.plotting import scatter_matrix
+# dataFrameDonnees = pd.DataFrame(data=matriceDonnees[idx,:], columns=["accountAge(days)", "agressivite","avg_hashtag","avg_url","mediumLength","rationFollowersFriends","tweet_per_day","verified","visibility"])
+# pd.plotting.scatter_matrix(dataFrameDonnees,figsize=(9,9))
+# plt.show()
 
 #calcul de l'inertie
 Iy=0
@@ -191,12 +191,12 @@ pourcent2 = np.sum(VaP[0:2])*100/Iacp
 #représentation de 100 000 individus pris aléatoirement sur ces 2 axes
 idx = np.random.randint(len(matriceDonnees), size=10000)
 
-itimg=1 
-plt.figure(itimg) #on explicite le numéro de la figure
-plt.plot(CP2[idx,0], CP2[idx,1],'.')
-plt.xlabel("axe1")
-plt.ylabel("axe2")
-plt.title("Représentation de 10 000 points sur les 2 composantes principales")
+# itimg=1 
+# plt.figure(itimg) #on explicite le numéro de la figure
+# plt.plot(CP2[idx,0], CP2[idx,1],'.')
+# plt.xlabel("axe1")
+# plt.ylabel("axe2")
+# plt.title("Représentation de 10 000 points sur les 2 composantes principales")
 
 
 # ===================== ACP 3 composantes ===================== #
@@ -245,41 +245,41 @@ CTAV2.index = attribut
 
 # Représentation des vecteurs de corrélation sur le cercle unité
 #trace le cercle
-import math 
-t=np.linspace(0,2*math.pi)
-x1=np.zeros(t.shape)
-y1=np.zeros(t.shape)
-for i in range(t.size):
-    #print(i)
-    x1[i]=math.cos(t[i])
-    y1[i]=math.sin(t[i])
-x2=np.linspace(-1,1)
-y2=np.zeros(t.shape)
-x3=np.zeros(t.shape)
-y3=np.linspace(-1,1)
-itimg=itimg+1
-fig = plt.figure(itimg)
-plt.plot(x1,y1)
-plt.plot(x2,y2)
-plt.plot(x3,y3)
-plt.xlabel("axis1")
-plt.ylabel("axis2")
+# import math 
+# t=np.linspace(0,2*math.pi)
+# x1=np.zeros(t.shape)
+# y1=np.zeros(t.shape)
+# for i in range(t.size):
+#     #print(i)
+#     x1[i]=math.cos(t[i])
+#     y1[i]=math.sin(t[i])
+# x2=np.linspace(-1,1)
+# y2=np.zeros(t.shape)
+# x3=np.zeros(t.shape)
+# y3=np.linspace(-1,1)
+# itimg=itimg+1
+# fig = plt.figure(itimg)
+# plt.plot(x1,y1)
+# plt.plot(x2,y2)
+# plt.plot(x3,y3)
+# plt.xlabel("axis1")
+# plt.ylabel("axis2")
 
 #ajoute les vecteurs
-for j in range(dimMatrice[1]):
-    plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
-    plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
-plt.show() 
+# for j in range(dimMatrice[1]):
+#     plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
+#     plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
+# plt.show() 
 
 # ===================== Inertie cumulée en fonction du nb de CP===================== #
 
 #Dispersion cumulées des CP en fonction du nombre de CP
-x=np.arange(0,VaP.size)+1 
-poucent_cumul=np.cumsum(VaP*100/np.sum(VaP)) 
-itimg=itimg+1 
-fig = plt.figure(itimg) 
-plt.plot(x,poucent_cumul) 
-plt.xlabel("nombre de variables") 
-plt.ylabel("pourcentage d'inertie cumulée")
-plt.show()
+# x=np.arange(0,VaP.size)+1 
+# poucent_cumul=np.cumsum(VaP*100/np.sum(VaP)) 
+# itimg=itimg+1 
+# fig = plt.figure(itimg) 
+# plt.plot(x,poucent_cumul) 
+# plt.xlabel("nombre de variables") 
+# plt.ylabel("pourcentage d'inertie cumulée")
+# plt.show()
 

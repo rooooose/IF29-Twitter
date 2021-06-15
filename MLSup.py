@@ -40,10 +40,13 @@ from sklearn.metrics import confusion_matrix
 C = 0.01
 noyau = 'linear'
 svm = SVC(C,noyau)
+print("svm créé")
 
 svm.fit(X_train, y_train)
+print("apprentissage fait")
 
 y_pred_test = svm.predict(X_test)
+print("prédiction faite")
 
 # y_pred_test = grille.predict(X_test)
 erreur_test = 1.0 - metrics.accuracy_score(y_test, y_pred_test)
@@ -55,12 +58,13 @@ print(conf)
 
 import matplotlib.pyplot as plt
 plt.figure("Confusion matrix")
-plt.xlabel('valeurs prédites')
-plt.ylabel('valeurs réelles')
+
 
 import seaborn as sns
-sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect","suspect"], yticklabels=["non suspect","suspect"])
-
+sns.heatmap(conf, square=True, annot=True, cbar=False, xticklabels=["non suspect","suspect"], yticklabels=["non suspect","suspect"], cmap ="Blues", fmt='d')
+plt.xlabel('valeurs prédites')
+plt.ylabel('valeurs réelles')
+plt.title("Matrice de confusion")
 plt.show()
 
 
@@ -68,7 +72,7 @@ plt.show()
 # Représentation dans le plan
 from AcpTweet import CP2
 
-X_train_ACP, X_test_ACP, y_train_ACP, y_test_ACP = train_test_split(CP2, etiquettes, test_size=10000, train_size=100000, random_state=42)
+X_train_ACP, X_test_ACP, y_train_ACP, y_test_ACP = train_test_split(CP2, etiquettes, test_size=10000, train_size=0.3, random_state=42)
 
 # idx = np.random.randint(len(matriceDonnees), size=1000)
 # sample_etiquettes = np.array(etiquettes)[idx]
@@ -88,6 +92,7 @@ y_min, y_max = X_test_ACP[:,1].min()-1, X_test_ACP[:,1].max()+1
 xx,yy = np.meshgrid(np.arange(x_min,x_max,h), np.arange(y_min,y_max,h))
 
 svm.fit(X_train_ACP,y_train_ACP)
+print("apprentissage fait")
 
 Z_origin = svm.predict(np.c_[xx.ravel(), yy.ravel()])
 Z = Z_origin.reshape(xx.shape)
