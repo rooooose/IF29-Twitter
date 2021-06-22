@@ -63,11 +63,14 @@ from sklearn import metrics
 
 #utilisation de la métrique "silhouette"
 #faire varier le nombre de clusters de 2 à 9
+# création d'un index aléatoire de 10 000 user pour l'affichage sinon trop long
+idx = np.random.randint(len(matriceDonnees), size=10000)
+dataFrameDonnees_affichage = dataFrameDonnees_cr[idx]
 res = np.arange(9,dtype="double")
 for k in np.arange(9):
     km = cluster.KMeans(n_clusters=k+2)
-    km.fit(dataFrameDonnees_cr)
-    res[k] = metrics.silhouette_score(dataFrameDonnees_cr,km.labels_)
+    km.fit(dataFrameDonnees_affichage)
+    res[k] = metrics.silhouette_score(dataFrameDonnees_affichage,km.labels_)
 
 #graphique
 import matplotlib.pyplot as plt
@@ -101,8 +104,10 @@ def etudeClusteringKmeans(nb_cluster):
     gb = dataFrameDonnees.groupby(kmeans.labels_)
 
     #ACP pour affichage
-    from sklearn.decomposition import PCA
-    acp = PCA(n_components=2).fit_transform(dataFrameDonnees_cr)
+    # from sklearn.decomposition import PCA
+    # acp = PCA(n_components=2).fit_transform(dataFrameDonnees_cr)
+    from AcpTweet import CP2
+    acp = CP2
     # print("#### ACP #####")
     # print (acp)
 
@@ -136,7 +141,9 @@ def etudeClusteringKmeans(nb_cluster):
     # ------- Projection 3D ------- #
 
     # ACP pour affichage 3D
-    acp = PCA(n_components=3).fit_transform(dataFrameDonnees_cr)
+    # acp = PCA(n_components=3).fit_transform(dataFrameDonnees_cr)
+    from AcpTweet import CP3
+    acp = CP3
     # création du dataframe concaténé aux labels
     acp_df = pandas.DataFrame(data=acp[idx,:3], columns=["CP1", "CP2", "CP3"])
     labels = pandas.DataFrame(data=kmeans.labels_[idx], columns=["label"])
@@ -283,4 +290,4 @@ def classerNewUserKMeans(user, nb_cluster):
 # =============== Utilisateur à classifier =============== #
 user = [[12, 2, 1, 4, 80, 0.5, 2, True, 0.0821]]
 # print(user[9])
-classerNewUserKMeans(user, 3)
+classerNewUserKMeans(user, 4)

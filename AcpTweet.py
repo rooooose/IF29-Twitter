@@ -148,6 +148,7 @@ Mcorr=np.corrcoef(np.transpose(Z))
 # print(Mcorr)
 # print(Mcorr.shape)
 
+# gère lorsqu'un utilisateur n'a pas de valeur pour un de ses attributs.
 def isNaN(num):
     if float('-inf') < float(num) < float('inf'):
         return False 
@@ -244,42 +245,42 @@ CTAV2.index = attribut
 # print(CTAV2)
 
 # Représentation des vecteurs de corrélation sur le cercle unité
-#trace le cercle
-# import math 
-# t=np.linspace(0,2*math.pi)
-# x1=np.zeros(t.shape)
-# y1=np.zeros(t.shape)
-# for i in range(t.size):
-#     #print(i)
-#     x1[i]=math.cos(t[i])
-#     y1[i]=math.sin(t[i])
-# x2=np.linspace(-1,1)
-# y2=np.zeros(t.shape)
-# x3=np.zeros(t.shape)
-# y3=np.linspace(-1,1)
-# itimg=itimg+1
-# fig = plt.figure(itimg)
-# plt.plot(x1,y1)
-# plt.plot(x2,y2)
-# plt.plot(x3,y3)
-# plt.xlabel("axis1")
-# plt.ylabel("axis2")
+# trace le cercle
+import math 
+t=np.linspace(0,2*math.pi)
+x1=np.zeros(t.shape)
+y1=np.zeros(t.shape)
+for i in range(t.size):
+    #print(i)
+    x1[i]=math.cos(t[i])
+    y1[i]=math.sin(t[i])
+x2=np.linspace(-1,1)
+y2=np.zeros(t.shape)
+x3=np.zeros(t.shape)
+y3=np.linspace(-1,1)
+itimg=itimg+1
+fig = plt.figure(itimg)
+plt.plot(x1,y1)
+plt.plot(x2,y2)
+plt.plot(x3,y3)
+plt.xlabel("axis1")
+plt.ylabel("axis2")
 
-#ajoute les vecteurs
-# for j in range(dimMatrice[1]):
-#     plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
-#     plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
-# plt.show() 
+# ajoute les vecteurs
+for j in range(dimMatrice[1]):
+    plt.plot([0,McorrV2[j,0]],[0,McorrV2[j,1]],'b')
+    plt.text(McorrV2[j,0],McorrV2[j,1],attribut[j])
+plt.show() 
 
 # ===================== Inertie cumulée en fonction du nb de CP===================== #
 
-#Dispersion cumulées des CP en fonction du nombre de CP
-# x=np.arange(0,VaP.size)+1 
-# poucent_cumul=np.cumsum(VaP*100/np.sum(VaP)) 
-# itimg=itimg+1 
-# fig = plt.figure(itimg) 
-# plt.plot(x,poucent_cumul) 
-# plt.xlabel("nombre de variables") 
-# plt.ylabel("pourcentage d'inertie cumulée")
-# plt.show()
+# Dispersion cumulées des CP en fonction du nombre de CP
+x=np.arange(0,VaP.size)+1 
+poucent_cumul=np.cumsum(VaP*100/np.sum(VaP)) 
+itimg=itimg+1 
+fig = plt.figure(itimg) 
+plt.plot(x,poucent_cumul) 
+plt.xlabel("nombre de variables") 
+plt.ylabel("pourcentage d'inertie cumulée")
+plt.show()
 
